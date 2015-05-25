@@ -1,11 +1,9 @@
 import os.path
 from multiprocessing import Pool
-import sys
-import os
 import time
 
 def process_file(name):
-    ''' Process one file: count number of lines and words '''
+    ''' Process a file: count number of lines and words '''
     linecount=0
     wordcount=0
     with open(name, 'r') as inp:
@@ -16,10 +14,13 @@ def process_file(name):
     return name, linecount, wordcount
 
 
-class Initer(object):
-    
+class Initialiser(object):
+    '''
+    show PID of process (to verify number and reuse of processes is as expected
+    '''
     def __call__(self):
         print "inside process ", os.getpid()
+        
 
 def process_files_parallel(thePool, dirname, names):
     ''' Process each file in parallel via Poll.map() '''
@@ -31,8 +32,7 @@ def process_files_parallel(thePool, dirname, names):
 
 if __name__ == '__main__':
     start=time.time()
-    dirPath = '/home/eoin/Documents/3rdparty/'#PyQt-x11-gpl-4.11.3'
-    start=time.time()
-    pool=Pool( initializer=Initer())
+    dirPath = '/home/eoin/Documents/3rdparty/'
+    pool=Pool( initializer=Initialiser())
     os.path.walk(dirPath, process_files_parallel, pool)
-    print "process_files_parallel()", time.time()-start
+    print "finished!"
